@@ -14,13 +14,15 @@ public class ProductService {
 
     final JmsTemplate jmsTemplate_basket;
     final ObjectMapper objectMapper;
+    final TinkEncDec tinkEncDec;
 
     public ResponseEntity sendBasket(Product product) {
         String sendData = "";
         try {
             product.setTime( System.currentTimeMillis() );
             sendData = objectMapper.writeValueAsString(product);
-            jmsTemplate_basket.convertAndSend(sendData);
+            String cipherText = tinkEncDec.encrypt(sendData);
+            jmsTemplate_basket.convertAndSend(cipherText);
             System.out.println(sendData);
         }catch (Exception ex) {}
         return new ResponseEntity(product, HttpStatus.OK);
