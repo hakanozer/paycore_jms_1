@@ -22,6 +22,7 @@ public class ProductService {
             product.setTime( System.currentTimeMillis() );
             sendData = objectMapper.writeValueAsString(product);
             String cipherText = tinkEncDec.encrypt(sendData);
+            //jmsTemplate_basket.setDeliveryDelay(3000);
             jmsTemplate_basket.convertAndSend(cipherText);
             System.out.println(sendData);
         }catch (Exception ex) {}

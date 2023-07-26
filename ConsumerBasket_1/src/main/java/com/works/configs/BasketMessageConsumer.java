@@ -2,6 +2,7 @@ package com.works.configs;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.works.models.Product;
+import com.works.services.TinkEncDec;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
 
@@ -14,6 +15,7 @@ import javax.jms.TextMessage;
 public class BasketMessageConsumer implements MessageListener {
 
     final ObjectMapper objectMapper;
+    final TinkEncDec tinkEncDec;
 
     @Override
     public void onMessage(Message message) {
@@ -23,6 +25,7 @@ public class BasketMessageConsumer implements MessageListener {
                 String messageID = textMessage.getJMSMessageID();
                 long time = textMessage.getJMSTimestamp();
                 String stData = textMessage.getText();
+                stData = tinkEncDec.decrypt(stData);
                 Product product = objectMapper.readValue(stData, Product.class);
                 System.out.println(messageID + " - " + time + " - " +product.getPid() + " - " + product.getTitle());
             }catch (Exception ex) {
