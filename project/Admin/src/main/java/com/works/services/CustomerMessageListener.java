@@ -30,6 +30,7 @@ public class CustomerMessageListener {
             @Headers MessageHeaders messageHeaders
             ) throws Exception {
         Object sessionIDObj = messageHeaders.get("sessionID");
+        System.out.println(textMessage.getText());
         if (sessionIDObj != null) {
             String sessionID = (String) sessionIDObj;
             if ( !sessionID.equals("") ) {
